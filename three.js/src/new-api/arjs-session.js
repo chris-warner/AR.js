@@ -114,6 +114,18 @@ const Session = function (parameters) {
     });
   });
 
+  // Listen for orientation changes
+  // getSourceOrientation reports landscape for portrait and portrait for landscape when the function is called here (but no upon initialization).
+  // Created function getSourceOrientationForRotation to fix this.
+  window.addEventListener(
+    "orientationchange",
+    function () {
+      // Announce the new orientation number
+      getSourceOrientationForRotation();
+    },
+    false
+  );
+
   function getSourceOrientation() {
     if (!_this) {
       return null;
@@ -126,6 +138,26 @@ const Session = function (parameters) {
     );
 
     if (arSource.domElement.clientWidth > arSource.domElement.clientHeight) {
+      console.log("source orientation", "landscape");
+      return "landscape";
+    } else {
+      console.log("source orientation", "portrait");
+      return "portrait";
+    }
+  }
+
+  function getSourceOrientationForRotation() {
+    if (!_this) {
+      return null;
+    }
+
+    console.log(
+      "actual source dimensions",
+      arSource.domElement.clientWidth,
+      arSource.domElement.clientHeight
+    );
+
+    if (arSource.domElement.clientWidth < arSource.domElement.clientHeight) {
       console.log("source orientation", "landscape");
       return "landscape";
     } else {
